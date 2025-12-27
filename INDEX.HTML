@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Love For You, Wify</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&family=Sacramento&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary: #ff4d8d;
+            --secondary: #ff97c1;
+            --accent: #ffd700;
+            --dark-bg: #0f0c29;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-blur: 16px;
+            --text-shadow: 0 0 15px rgba(255, 77, 141, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        header { text-align: center; padding: 40px 0; }
+
+        .logo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            background: linear-gradient(to right, #fff, #ff97c1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 77, 141, 0.4);
+            margin-bottom: 10px;
+            animation: floatTitle 4s ease-in-out infinite;
+        }
+
+        .subtitle {
+            font-family: 'Sacramento', cursive;
+            font-size: 2.2rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+        }
+
+        /* Glassmorphism Cards */
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: transform 0.1s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .card-content { transform: translateZ(20px); }
+
+        .card-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: var(--accent);
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .love-message p {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            text-align: center;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: 700;
+            text-shadow: 0 0 8px var(--primary);
+        }
+
+        /* Proposal Section */
+        .ring-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ring i {
+            font-size: 100px;
+            background: linear-gradient(45deg, #ffd700, #ffec8b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+            animation: ringFloat 3s ease-in-out infinite;
+        }
+
+        .ring-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(0,0,0,0) 70%);
+            animation: pulseGlow 2s infinite;
+        }
+
+        .proposal-text {
+            font-size: 3rem;
+            font-family: 'Dancing Script', cursive;
+            text-align: center;
+            background: linear-gradient(to right, #ff4d8d, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        /* Buttons */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            position: relative;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1;
+        }
+
+        .yes-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 77, 141, 0.4);
+        }
+
+        .yes-btn .btn-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: var(--primary);
+            z-index: -1;
+            transition: width 0.3s;
+        }
+
+        .yes-btn:hover .btn-bg { width: 100%; }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 77, 141, 0.8);
+        }
+
+        .no-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Love Note */
+        .note-textarea {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            font-size: 1.1rem;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            resize: none;
+            margin-bottom: 20px;
+            transition: border-color 0.3s;
+        }
+
+        .note-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(255, 77, 141, 0.2);
+        }
+
+        .save-btn {
+            background: linear-gradient(45deg, #00b09b, #96c93d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-bottom: 30px;
+        }
+
+        .couple-name {
+            font-family: 'Sacramento', cursive;
+            font-size: 3rem;
+            color: var(--secondary);
+            text-shadow: 0 0 10px rgba(255, 77, 141, 0.8);
+        }
+
+        /* Animations */
+        .animate-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.5s; }
+        .delay-3 { animation-delay: 0.8s; }
+        .delay-4 { animation-delay: 1.1s; }
+        .delay-5 { animation-delay: 1.4s; }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes floatTitle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes ringFloat {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        @media (max-width: 768px) {
+            .logo { font-size: 3rem; }
+            .card { padding: 25px; }
+            .card-title { font-size: 2.2rem; }
+            .proposal-text { font-size: 2rem; }
+            .buttons { flex-direction: column; width: 100%; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="container">
+        <header class="animate-in delay-1">
+            <h1 class="logo">My Eternal Love</h1>
+            <p class="subtitle">For My Beautiful Wify</p>
+        </header>
+
+        <main class="content">
+            <div class="card tilt-card animate-in delay-2">
+                <div class="card-content">
+                    <h2 class="card-title">My Dearest Wify</h2>
+                    <div class="love-message">
+                        <p>Every moment with you is a treasure, and every day I fall more deeply in love with you.</p>
+                        <p>You are the <span class="highlight">sunshine</span> that brightens my days and the <span class="highlight">moonlight</span> that guides my nights.</p>
+                        <p>Today and always, I want you to know that <span class="highlight">I LOVE YOU JUNNU</span> with all my heart.</p>
+                        <p>You are my everything, my forever, my <span class="highlight">WIFY</span>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card tilt-card proposal animate-in delay-3">
+                <div class="card-content">
+                    <h2 class="card-title">My Promise to You</h2>
+                    <div class="ring-container">
+                        <div class="ring-glow"></div>
+                        <div class="ring">
+                            <i class="fas fa-ring"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="proposal-text" id="proposal-text">Will You Marry Me?</div>
+                    
+                    <div class="buttons">
+                        <button class="btn yes-btn" id="yes-btn">
+                            <span class="btn-bg"></span>
+                            <span class="btn-text"><i class="fas fa-heart"></i> YES!</span>
+                        </button>
+                        <button class="btn no-btn" id="no-btn">
+                            <span class="btn-text">No <i class="fas fa-sad-tear"></i></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card tilt-card love-note animate-in delay-4">
+                <div class="card-content">
+                    <h2 class="card-title">Our Love Note</h2>
+                    <textarea class="note-textarea" id="love-note" placeholder="Write your personal love note here...">My Dearest Wify,
+From the moment I met you, my life has been filled with joy and meaning. You are my greatest blessing, and I cherish every moment we share together.
+
+With all my love,
+Your Junnu</textarea>
+                    <button class="btn save-btn" id="save-note">
+                        <i class="fas fa-save"></i> Save Note
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="animate-in delay-5">
+            <div class="couple-name">Deepjoy & Sreenanda</div>
+            <p>Forever and Always</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. Background Particle System ---
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedY = Math.random() * 0.5 + 0.2;
+                    this.opacity = Math.random() * 0.5 + 0.1;
+                    this.color = `rgba(255, ${Math.random() * 100 + 100}, 200, ${this.opacity})`;
+                    this.isHeart = Math.random() > 0.8; 
+                }
+                update() {
+                    this.y -= this.speedY;
+                    if (this.y < 0) {
+                        this.y = height;
+                        this.x = Math.random() * width;
+                    }
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    if (this.isHeart) {
+                        ctx.font = `${this.size * 4}px Arial`;
+                        ctx.fillText('❤', this.x, this.y);
+                    } else {
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            function initParticles() {
+                for (let i = 0; i < 100; i++) { particles.push(new Particle()); }
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => { p.update(); p.draw(); });
+                requestAnimationFrame(animateParticles);
+            }
+
+            initParticles();
+            animateParticles();
+
+            // --- 2. 3D Tilt Effect ---
+            const cards = document.querySelectorAll('.tilt-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -5;
+                    const rotateY = ((x - centerX) / centerX) * 5;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+                });
+            });
+
+            // --- 3. Proposal Logic ---
+            const yesBtn = document.getElementById('yes-btn');
+            const noBtn = document.getElementById('no-btn');
+            const proposalText = document.getElementById('proposal-text');
+
+            yesBtn.addEventListener('click', () => {
+                proposalText.innerHTML = "I Knew You Would Say Yes! 💍";
+                proposalText.style.color = "#ffd700";
+                proposalText.style.textShadow = "0 0 20px #ff4d8d";
+
+                // Confetti Explosion
+                const duration = 5 * 1000;
+                const animationEnd = Date.now() + duration;
+                const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+                const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+                const interval = setInterval(function() {
+                    const timeLeft = animationEnd - Date.now();
+                    if (timeLeft <= 0) return clearInterval(interval);
+                    const particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+
+                setTimeout(() => {
+                     alert("My darling Wify, I promise to love you forever and make every day as magical as this moment! 💍❤️");
+                }, 1500);
+            });
+
+            // Runaway No Button
+            noBtn.addEventListener('mouseover', () => {
+                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 50);
+                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 50);
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = `${Math.max(0, x)}px`;
+                noBtn.style.top = `${Math.max(0, y)}px`;
+                const phrases = ["Oops, too slow!", "Try again!", "Nope!", "Wrong button!", "Can't catch me!"];
+                noBtn.querySelector('.btn-text').innerText = phrases[Math.floor(Math.random() * phrases.length)];
+            });
+
+            // --- 4. Save Note ---
+            const saveNoteBtn = document.getElementById('save-note');
+            const loveNoteText = document.getElementById('love-note');
+            const savedNote = localStorage.getItem('loveNoteToWify');
+            if (savedNote) loveNoteText.value = savedNote;
+
+            saveNoteBtn.addEventListener('click', () => {
+                localStorage.setItem('loveNoteToWify', loveNoteText.value);
+                const originalText = saveNoteBtn.innerHTML;
+                saveNoteBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+                saveNoteBtn.style.background = 'linear-gradient(45deg, #2ecc71, #1abc9c)';
+                setTimeout(() => {
+                    saveNoteBtn.innerHTML = originalText;
+                    saveNoteBtn.style.background = '';
+                }, 2000);
+            });
+
+            // --- 5. Heart Burst on Click ---
+            document.addEventListener('click', (e) => {
+                if(e.target.closest('button')) return;
+                const heart = document.createElement('div');
+                heart.innerHTML = '💖';
+                heart.style.position = 'fixed';
+                heart.style.left = (e.clientX - 10) + 'px';
+                heart.style.top = (e.clientY - 10) + 'px';
+                heart.style.fontSize = '20px';
+                heart.style.pointerEvents = 'none';
+                heart.style.zIndex = '1000';
+                document.body.appendChild(heart);
+                const anim = heart.animate([
+                    { transform: 'translateY(0) scale(1)', opacity: 1 },
+                    { transform: 'translateY(-50px) scale(2)', opacity: 0 }
+                ], { duration: 1000, easing: 'ease-out' });
+                anim.onfinish = () => heart.remove();
+            });
+        });
+    </script>
+</body>
+</html>
